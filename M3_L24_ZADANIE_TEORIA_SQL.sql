@@ -28,3 +28,6 @@ create table training_zs.sales(
 alter table training_zs.sales
 ADD FOREIGN KEY (product_id)
 REFERENCES training_zs.products(id) ON DELETE CASCADE;
+
+
+--test
