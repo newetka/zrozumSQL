@@ -22,7 +22,7 @@ create table training.test ()
 --8
 REVOKE CREATE ON SCHEMA training FROM reporting_ro;
 --9
-drop table training.test2 ()
+create table training.test2 ()
 create table public.test2 ()
 --brak możliwośći utworzenia ww. tabel przez użytkownika reporting_user
 REASSIGN OWNED BY reporting_user TO postgres;
