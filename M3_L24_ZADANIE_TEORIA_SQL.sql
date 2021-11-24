@@ -30,4 +30,4 @@ ADD FOREIGN KEY (product_id)
 REFERENCES training_zs.products(id) ON DELETE CASCADE;
 
 
---test
+
