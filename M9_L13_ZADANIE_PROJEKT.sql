@@ -53,50 +53,75 @@ GROUP BY YEAR,
 --BUDGET_PLANNED NUMERIC(10,2)
 --Dodaj do tej tabeli nowy rekord z planowanym budżetem na dany miesiąc obecnego
 --roku (do obu atrybutów BUDGET_PLANNED, LEFT_BUDGET ta sama wartość)
-drop table if exists expense_tracker.MONTHLY_BUDGET_PLANNED;
-create table expense_tracker.MONTHLY_BUDGET_PLANNED(
-YEAR_MONTH VARCHAR(7) PRIMARY KEY,
-BUDGET_PLANNED NUMERIC(10,2),
-LEFT_BUDGET NUMERIC(10,2)
-);
+DROP TABLE IF EXISTS EXPENSE_TRACKER.MONTHLY_BUDGET_PLANNED;
 
-INSERT INTO expense_tracker.monthly_budget_planned (YEAR_MONTH,BUDGET_PLANNED,LEFT_BUDGET) values
-(extract(month from CURRENT_Date), 1000,1000)
 
---4
+CREATE TABLE EXPENSE_TRACKER.MONTHLY_BUDGET_PLANNED(YEAR_MONTH VARCHAR(7) PRIMARY KEY,
+																																																					BUDGET_PLANNED NUMERIC(10,
+
+																																																																								2),
+																																																					LEFT_BUDGET NUMERIC(10,
+
+																																																																					2));
+
+
+INSERT INTO EXPENSE_TRACKER.MONTHLY_BUDGET_PLANNED (YEAR_MONTH,
+
+																																	BUDGET_PLANNED,
+																																	LEFT_BUDGET)
+VALUES (EXTRACT(MONTH FROM CURRENT_DATE), 1000,1000)--4
 --Dodaj nowy Wyzwalacz do tabeli TRANSACTIONS, który przy każdorazowym dodaniu
 --/ zaktualizowaniu lub usunięciu wartości zmieni wartość LEFT_BUDGET odpowiednio
 --w tabeli expense_tracker.monthly_budget_planned.
-DROP FUNCTION transaction_archive_function CASCADE;
-CREATE FUNCTION transaction_archive_function() 
-	RETURNS TRIGGER
-	LANGUAGE plpgsql
-	AS $$
-		BEGIN	
+
+DROP FUNCTION TRANSACTION_ARCHIVE_FUNCTION CASCADE;
+
+
+CREATE FUNCTION TRANSACTION_ARCHIVE_FUNCTION() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$
+		BEGIN
 			IF (TG_OP = 'UPDATE') THEN
 				update expense_tracker.monthly_budget_planned set LEFT_BUDGET=LEFT_BUDGET+old.TRANSACTION_value-new.TRANSACTION_value;
 			ELSEIF (TG_OP = 'INSERT') THEN
 				update expense_tracker.monthly_budget_planned set LEFT_BUDGET=LEFT_BUDGET-old.TRANSACTION_value;
-			ELSEIF (TG_OP = 'DELETE') THEN 
+			ELSEIF (TG_OP = 'DELETE') THEN
 				update expense_tracker.monthly_budget_planned set LEFT_BUDGET=LEFT_BUDGET+old.TRANSACTION_value;
 			END IF;
  		    RETURN NULL; -- rezultat zignoruj
 		END
-	$$;  
-CREATE TRIGGER transaction_archive_trg
-	AFTER UPDATE OR DELETE OR INSERT ON expense_tracker.transactions
-		FOR EACH ROW EXECUTE PROCEDURE transaction_archive_function();	
+	$$;
+
+
+CREATE TRIGGER TRANSACTION_ARCHIVE_TRG AFTER
+UPDATE
+OR
+DELETE
+OR
+INSERT ON EXPENSE_TRACKER.TRANSACTIONS
+FOR EACH ROW EXECUTE PROCEDURE TRANSACTION_ARCHIVE_FUNCTION();
 
 --5
 --Przetestuj działanie wyzwalacza dla kilku przykładowych operacji.
-update expense_tracker.transactions set transaction_value=20
-where transaction_description='28d' and transaction_date='2015-07-01';
+UPDATE EXPENSE_TRACKER.TRANSACTIONS
+SET TRANSACTION_VALUE = 20
+WHERE TRANSACTION_DESCRIPTION = '28d'
+				AND TRANSACTION_DATE = '2015-07-01';
 
-delete from expense_tracker.transactions where
-transaction_description='187' and transaction_date='2015-08-01';
 
-INSERT INTO expense_tracker.transactions (id_trans_ba ,id_trans_cat, id_trans_subcat,id_trans_type,id_user,transaction_value,transaction_description)					    
-	 VALUES (1,1,1,1,2,100,'test 3' );
+DELETE
+FROM EXPENSE_TRACKER.TRANSACTIONS
+WHERE TRANSACTION_DESCRIPTION = '187'
+				AND TRANSACTION_DATE = '2015-08-01';
+
+
+INSERT INTO EXPENSE_TRACKER.TRANSACTIONS (ID_TRANS_BA,
+
+																																	ID_TRANS_CAT,
+																																	ID_TRANS_SUBCAT,
+																																	ID_TRANS_TYPE,
+																																	ID_USER,
+																																	TRANSACTION_VALUE,
+																																	TRANSACTION_DESCRIPTION)
+VALUES (1,1,1,1,2,100,'test 3');
 --insert nie działa. Po wykonoaniu inserta w kolumnie LEFT_BUDGET pojawia się null. Co jest błędne w moim zapytaniu/funkcji?
 
 --6
