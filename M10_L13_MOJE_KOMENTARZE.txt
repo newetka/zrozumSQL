@@ -1,0 +1,10 @@
+MOJE BŁĘDY:
+Jeżeli chodzi o obserwacje mojej dotychczasowej pracy z bazą względem antywzorców, które przedstawiłeś:
+- widzę że często w moich kodach pojawiał się problem z czytelością kodu, co też już zauważyłes wcześniej w przeyłanych przeze mnie postępach - Order by 1, group by 1, to coś co często się pojawiało w moich zapytaniach.
+- nie miałam zbut dużej świadomosci co do używania kluczy obcych, już po obejrzeniu wcześniejszych filmów, w których je omawiałeś, uświadomiłam sobie że nie potrafiłąm ich używać, albo tego nie robiłam, a są one niezbędne podczas pracy. Oczywiście korzystałam z nich podczas budowania zapytań, wiem że istnieją, ale gdy tworzyłam nowe tabele mało kiedy dodawałam klucze obce, jakby było to coś zbędnego.
+- nieprzepyślane używanie typów danych - co prawda jeszcze nigdy nie wywołało to żadnego błędu/problemu, szcześliwie udało mi się zawsze wybrać prawidłowy typ. Ale uważam, że na pewno 'na przyszłość' powinnam podejść do wybou typów danch z większym przemyśleniem, żeby uniknąc ewentualncyh problemów.
+- nieświadomość ' wstrzykiwania sqla'.
+- aliasy
+- używanie zwykle wyłącznie inner joina, gdzie w niektórych przypadkach byłby lepszy left join
+
+SPOSTRZEŻENIA DO PROJEKTU:
